@@ -13,15 +13,17 @@ import useGetData from "../custom-hooks/useGetData.js";
 import ProductsList from "../components/UI/ProductsList";
 
 const Shop = () => {
-    // const { data: productsData } = useGetData("product");
+    const { data: Allproducts } = useGetData("products");
 
     const [productsData2, setProductsData] = useState([])
+    // const [Allproducts, setAllProductsData] = useState([])
     const [data, setData] = useState([]);
     const [filter, setFilter] = useState('')
     const collectionRef = filter == '' ? collection(db, "products") : query(collection(db, "products"), where("category", "==", filter));
+    const collectionRef2 = collection(db, "products");
 
 
-    console.log(data)
+    console.log(Allproducts)
     useEffect(() => {
         const getData = async () => {
             const data = await getDocs(collectionRef)
@@ -29,6 +31,7 @@ const Shop = () => {
             setProductsData(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
             console.log(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
         };
+
         getData();
     }, [filter]);
     // return { data };
@@ -64,11 +67,17 @@ const Shop = () => {
 
     // };
 
+
     const handleSearch = e => {
         const searchTerm = e.target.value
 
-        const searchedProducts = productsData2.filter(item => item.productName.toLowerCase().includes(searchTerm.toLowerCase()))
-        setProductsData(searchedProducts)
+        const searchedProducts = Allproducts?.filter(i => i.title.toLowerCase().includes(searchTerm.toLowerCase()))
+        // filter == '' ? collection(db, "products") : query(collection(db, "products"), where("category", "==", filter));
+        console.log(searchedProducts)
+        if (searchedProducts == '' || searchTerm == '') {
+            // searchedProducts(productsData2)
+        } else
+            setProductsData(searchedProducts)
     }
     return (
         <Helmet title="Shop">

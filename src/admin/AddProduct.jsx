@@ -44,7 +44,7 @@ const AddProduct = () => {
 
             const storageRef = ref(storage, `productImages/${Date.now() + enterProductImg.name}`)
             const uploadTask = uploadBytesResumable(storageRef, enterProductImg)
-
+            console.log(uploadTask)
             uploadTask.on(() => {
                 toast.error("Images not uploaded")
             }, () => {
@@ -56,6 +56,7 @@ const AddProduct = () => {
                         category: enterCategory,
                         price: enterPrice,
                         imgUrl: downloadURL,
+                        cmt: []
                     });
                 });
 

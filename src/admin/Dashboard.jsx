@@ -6,7 +6,7 @@ import useGetData from "../custom-hooks/useGetData";
 const Dashboard = () => {
 
 
-    const { data: product } = useGetData("product");
+    const { data: product } = useGetData("products");
     const { data: users } = useGetData("users");
     return (
         <>

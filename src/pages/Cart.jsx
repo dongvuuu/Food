@@ -86,11 +86,41 @@ const Tr = ({ item }) => {
         dispatch(cartActions.deleteItem(item.id))
     };
 
+
+    const handlePlus = () => {
+        dispatch(cartActions.addItem({
+            id: item?.id,
+        }))
+    }
+    const handleMinus = () => {
+        dispatch(cartActions.minusItem({
+            id: item?.id,
+        }))
+    }
     return <tr>
         <td><img src={item?.imgUrl} alt="" /></td>
         <td>{item?.productName}</td>
         <td>${item?.price}</td>
-        <td>{item?.quantity}</td>
+        <td>
+            <div class="input">
+                <button onClick={handleMinus} class="minus" aria-label="Decrease by one" >
+                    <svg width="16" height="2" viewBox="0 0 16 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line y1="1" x2="16" y2="1" stroke="#0064FE" stroke-width="2" class="icon" />
+                    </svg>
+                </button>
+                <div class="number dim"> {item?.quantity}</div>
+                <button onClick={handlePlus} class="plus" aria-label="Increase by one">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+                        <line x1="8" y1="4.37114e-08" x2="8" y2="16" stroke="#0064FE" stroke-width="2" />
+                        <line y1="8" x2="16" y2="8" stroke="#0064FE" stroke-width="2" />
+                    </svg>
+
+                </button>
+            </div>
+            {/* <button onClick={handlePlus}>+</button>
+           
+            <button onClick={handleMinus}>-</button> */}
+        </td>
         <td>
             <motion.i whileTap={{ scale: 1.2 }} onClick={deleteProduct} class="ri-delete-bin-line"></motion.i>
         </td>

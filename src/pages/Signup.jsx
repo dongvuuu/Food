@@ -6,11 +6,11 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { setDoc, doc } from "firebase/firestore";
 
-import {auth} from "../firebase.config.js";
+import { auth } from "../firebase.config.js";
 import { storage } from "../firebase.config.js";
 import { db } from "../firebase.config.js";
 
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 import "../styles/login.css";
 import { useNavigate } from "react-router-dom";
@@ -21,95 +21,95 @@ const Signup = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [file, setFile] = useState("null");
-    const [loading, setLoading] = useState (false);
+    const [loading, setLoading] = useState(false);
 
-    const navigate = useNavigate ();
+    const navigate = useNavigate();
 
     const signup = async (e) => {
-        e.preventDefault ()
+        e.preventDefault()
         setLoading(true)
         try {
-            const userCredential = await createUserWithEmailAndPassword (
-                auth, 
-                email, 
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                email,
                 password
             );
             const user = userCredential.user;
 
             const storageRef = ref(storage, `images/${Date.now() + userName}`);
-            const uploadTask = uploadBytesResumable (storageRef, file );
-            uploadTask .on ((error)=>{
-               toast.error(error.message) 
-            }, ()=>{
-                getDownloadURL(uploadTask.snapshot.ref).then(async(downloadURL) =>{
-                   
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            uploadTask.on((error) => {
+                toast.error(error.message)
+            }, () => {
+                getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+
                     //update user profile
-                    await updateProfile(user,{
+                    await updateProfile(user, {
                         displayName: userName,
                         photoURL: downloadURL,
                     });
 
                     //store user data in firestore database
-                    await setDoc(doc(db,"users", user.uid), {
+                    await setDoc(doc(db, "users", user.uid), {
                         uid: user.uid,
-                        displayName: userName, 
+                        displayName: userName,
                         email,
                         photoURL: downloadURL,
                     })
                 });
             }
-        );
-            
-        
-        setLoading (false);
-        toast.success("Account created");
-        navigate('/login');
+            );
 
-        }catch (error) {
+
+            setLoading(false);
+            toast.success("Account created");
+            navigate('/login');
+
+        } catch (error) {
             setLoading(false)
-            toast.error ("something went wrong");
+            toast.error("something went wrong");
 
         }
     };
 
     return (
-    <Helmet title="Signup">
-        <section>
-            <Container>
-                <Row>
-                   {
-                    loading? <Col lg="12" className="text-center"><h5
-                    className="fw-bold">Loading.....</h5></Col> : <Col lg="6" className="m-auto text-center">
-                    <h3 className="fw-bold mb-4">Signup</h3>
+        <Helmet title="Signup">
+            <section>
+                <Container>
+                    <Row>
+                        {
+                            loading ? <Col lg="12" className="text-center"><h5
+                                className="fw-bold">Loading.....</h5></Col> : <Col lg="6" className="m-auto text-center">
+                                <h3 className="fw-bold mb-4">Signup</h3>
 
-                    <Form className="auth__form" onSubmit={signup}>
-                        <FormGroup className="form__group">
-                            <input type="text" placeholder="Username" value={userName} onChange={e => setUsername(e.target.value)} />
-                        </FormGroup>
+                                <Form className="auth__form" onSubmit={signup}>
+                                    <FormGroup className="form__group">
+                                        <input type="text" placeholder="Username" value={userName} onChange={e => setUsername(e.target.value)} />
+                                    </FormGroup>
 
-                        <FormGroup className="form__group">
-                            <input type="email" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)} />
-                        </FormGroup>
+                                    <FormGroup className="form__group">
+                                        <input type="email" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)} />
+                                    </FormGroup>
 
 
-                        <FormGroup className="form__group">
-                            <input type="password" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} />
-                        </FormGroup>
+                                    <FormGroup className="form__group">
+                                        <input type="password" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} />
+                                    </FormGroup>
 
-                        <FormGroup className="form__group">
-                            <input type="file" onChange={e => setFile(e.target.files[0])} />
-                        </FormGroup>
+                                    <FormGroup className="form__group">
+                                        <input type="file" onChange={e => setFile(e.target.files[0])} />
+                                    </FormGroup>
 
-                        <button type="submit" className="buy__btn auth__btn">Create an Account</button>
-                        <p>Already have an account? <Link to="/login">Login</Link></p>
-                    </Form>
+                                    <button type="submit" className="buy__btn auth__btn">Create an Account</button>
+                                    <p>Already have an account? <Link to="/login">Login</Link></p>
+                                </Form>
 
-                </Col>
-                   }
-                </Row>
-            </Container>
-        </section>
-    </Helmet>
+                            </Col>
+                        }
+                    </Row>
+                </Container>
+            </section>
+        </Helmet>
     );
 
 };

@@ -12,3 +12,68 @@ td,
 th {
     color: var(--primary-color);
 }
+
+
+  .input-row {
+    display: flex;
+    padding: var(--space-8) 0;
+    border-bottom: var(--border);
+  }
+  .input-row:last-child {
+    border-bottom: 0;
+  }
+  .title {
+    margin-right: var(--space-8);
+  }
+  .label {
+    margin-bottom: var(--space-1);
+    font-weight: bold;
+  }
+  .description {
+    color: var(--color-gray-600);
+  }
+  .input {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid blue;
+    border-radius: 100%;
+    margin-left: 5px;
+    margin-right: 5px;
+    /* background-color: var(--color-white); */
+  }
+  button:hover {
+    background-color:     lightblue;
+    cursor: pointer;
+  }
+  button:focus {
+    outline: none;
+    /* box-shadow: 1px 2px 1px 1px; */
+  }
+  button[disabled] {
+    opacity: 50%;
+    pointer-events: none;
+  }
+  button:active {
+    background-color: lightcoral;
+  }
+  
+  .number {
+    font-size: var(--text-lg);
+    min-width: var(--space-12);
+    text-align: center;
+  }
+  .icon {
+    user-select: none;
+  }
+  .dim {
+    color: var(--color-gray-400);
+  }
+  

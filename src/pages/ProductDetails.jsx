@@ -13,10 +13,12 @@ import { cartActions } from "../redux/slices/cartSlice";
 import { toast } from "react-toastify";
 
 import { db } from "../firebase.config";
-import { doc, getDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import useGetData from "../custom-hooks/useGetData";
-
+import useAuth from "../custom-hooks/useAuth";
+import { v4 as uuidv4 } from 'uuid'
 const ProductDetails = () => {
+    const { currentUser } = useAuth();
 
     const [products, setProduct] = useState({});
     const [tab, setTab] = useState("desc");
@@ -29,35 +31,32 @@ const ProductDetails = () => {
     const { data: product } = useGetData("products");
     // const product = products.find(item => item.id === id)
     const docRef = doc(db, "products", id)
-    console.log(docRef)
+    // console.log(docRef)
     // const docRef = doc(db, "cities", "2l3bcSGs2vZBIc3RODwp");
-    useEffect(() => {
-
-
-        const getProduct = async () => {
-            // const docSnap = await getDoc(docRef)
-            // console.log(docSnap)
-            // if (docSnap.exists()) {
-            //     setProduct(docSnap.data())
-            //     console.log(products)
-            // } else {
-            //     console.log("No product")
-            // }
-            try {
-                const docSnap = await getDoc(docRef);
+    const getProduct = async () => {
+        // const docSnap = await getDoc(docRef)
+        // console.log(docSnap)
+        // if (docSnap.exists()) {
+        //     setProduct(docSnap.data())
+        //     console.log(products)
+        // } else {
+        //     console.log("No product")
+        // }
+        try {
+            const docSnap = await getDoc(docRef);
+            // console.log(docSnap.data());
+            if (docSnap.exists()) {
                 // console.log(docSnap.data());
-                if (docSnap.exists()) {
-                    console.log(docSnap.data());
-                    setProduct(docSnap.data())
-                } else {
-                    console.log("Document does not exist")
-                }
-
-            } catch (error) {
-                console.log(error)
+                setProduct(docSnap.data())
+            } else {
+                console.log("Document does not exist")
             }
-        }
 
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
         getProduct()
     }, [])
 
@@ -89,14 +88,37 @@ const ProductDetails = () => {
     const addToCart = () => {
         dispatch(cartActions.addItem({
             id,
-            image: imgUrl,
-            productName,
-            price,
+            imgUrl: products?.imgUrl,
+            productName: products?.productName,
+            price: products?.price,
 
         })
         );
         toast.success("Product added successfully");
     };
+    // console.log(products?.cmt)
+    const handleChangeComment = () => {
+        try {
+
+            updateDoc(docRef, {
+                cmt: arrayUnion(
+                    {
+                        displayName: currentUser?.displayName,
+                        userId: currentUser?.uid,
+                        comment: reviewMsg.current.value,
+                        photoURL: currentUser?.photoURL,
+                        rating: rating,
+                        id: uuidv4()
+                    }
+                )
+            })
+            toast.success("Review submitted");
+            getProduct()
+
+        } catch (error) {
+
+        }
+    }
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -183,25 +205,49 @@ const ProductDetails = () => {
                                             </ul> */}
                                             <div className="review__form">
                                                 <h4>Leave your experience</h4>
+
+
+                                                {
+                                                    products?.cmt.map((item) => {
+                                                        return (<>
+                                                            <div>
+
+                                                                <div class="verified_customer_section">
+                                                                    <div class="image_review">
+                                                                        <div class="customer_image">
+                                                                            <img src={item?.photoURL} />
+                                                                        </div>
+
+                                                                        <div class="customer_name_review_status">
+                                                                            <div class="customer_name">{item?.displayName}</div>
+                                                                            <div class="customer_review">
+                                                                                {item?.rating} <i class="ri-star-s-fill"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="customer_comment">{item?.comment}</div>
+                                                                </div>
+                                                            </div>
+                                                        </>)
+                                                    })
+                                                }
                                                 <div >
-                                                    <div className="form__group">
-                                                        <input type="text" placeholder="Enter name" ref={reviewUser} required />
-                                                    </div>
+
 
                                                     <div className="form__group d-flex align-items-center gap-5 rating__group">
-                                                        <motion.span whileTap={{ scale: 1.2 }} onClick={() => setRating(1)}>
+                                                        <motion.span className={rating == 1 ? "bg-warning rounded-circle p-2" : ""} whileTap={{ scale: 1.2 }} onClick={() => setRating(1)}>
                                                             1<i class="ri-star-s-fill"></i>
                                                         </motion.span>
-                                                        <motion.span whileTap={{ scale: 1.2 }} onClick={() => setRating(2)}>
+                                                        <motion.span className={rating == 2 ? "bg-warning rounded-circle p-2" : ""} whileTap={{ scale: 1.2 }} onClick={() => setRating(2)}>
                                                             2<i class="ri-star-s-fill"></i>
                                                         </motion.span>
-                                                        <motion.span whileTap={{ scale: 1.2 }} onClick={() => setRating(3)}>
+                                                        <motion.span className={rating == 3 ? "bg-warning rounded-circle p-2" : ""} whileTap={{ scale: 1.2 }} onClick={() => setRating(3)}>
                                                             3<i class="ri-star-s-fill"></i>
                                                         </motion.span>
-                                                        <motion.span whileTap={{ scale: 1.2 }} onClick={() => setRating(4)}>
+                                                        <motion.span className={rating == 4 ? "bg-warning rounded-circle p-2" : ""} whileTap={{ scale: 1.2 }} onClick={() => setRating(4)}>
                                                             4<i class="ri-star-s-fill"></i>
                                                         </motion.span>
-                                                        <motion.span whileTap={{ scale: 1.2 }} onClick={() => setRating(5)}>
+                                                        <motion.span className={rating == 5 ? "bg-warning rounded-circle p-2" : ""} whileTap={{ scale: 1.2 }} onClick={() => setRating(5)}>
                                                             5<i class="ri-star-s-fill"></i>
                                                         </motion.span>
                                                     </div>
@@ -209,7 +255,7 @@ const ProductDetails = () => {
                                                     <div className="form__group">
                                                         <textarea ref={reviewMsg} rows={4} type="text" placeholder="Review message...." required />
                                                     </div>
-                                                    <motion.button whileTap={{ scale: 1.2 }} onClick={submitHandler} className="buy__btn">Submit</motion.button>
+                                                    <motion.button whileTap={{ scale: 1.2 }} onClick={handleChangeComment} className="buy__btn">Submit</motion.button>
 
                                                 </div>
                                             </div>
