@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Form, FormGroup } from "reactstrap";
+import { Container, Row, Col, Form, FormGroup as div } from "reactstrap";
 import { toast } from "react-toastify";
 
 import { db, storage } from "../firebase.config";
@@ -8,6 +8,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 
+import Swal from 'sweetalert2'
 const AddProduct = () => {
 
     const [enterTitle, setEnterTitle] = useState("");
@@ -49,6 +50,7 @@ const AddProduct = () => {
                 toast.error("Images not uploaded")
             }, () => {
                 getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+
                     await addDoc(docRef, {
                         title: enterTitle,
                         shortDesc: enterShortDesc,
@@ -73,6 +75,21 @@ const AddProduct = () => {
         // console.log(product);
     }
 
+    const upload = (e) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: enterTitle + "" + enterShortDesc + "" + enterDescription + "" + enterCategory + "" + enterPrice + "" + enterProductImg,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                addProduct(e)
+            }
+        })
+    }
     return (
         <section>
             <Container>
@@ -82,27 +99,27 @@ const AddProduct = () => {
                             loading ? <h4 className="py-5">Loading.....</h4> : <>
 
                                 <h4 className="mb-5">Add Product</h4>
-                                <Form onSubmit={addProduct}>
-                                    <FormGroup className="form__group">
+                                <div >
+                                    <div className="form__group">
                                         <span>Product title</span>
                                         <input type="text" placeholder="Hamburger" value={enterTitle} onChange={e => setEnterTitle(e.target.value)} required />
-                                    </FormGroup>
-                                    <FormGroup className="form__group">
+                                    </div>
+                                    <div className="form__group">
                                         <span>Short Description</span>
                                         <input type="text" placeholder="It's taste like..." value={enterShortDesc} onChange={e => setEnterShortDesc(e.target.value)} required />
-                                    </FormGroup>
+                                    </div>
 
-                                    <FormGroup className="form__group">
+                                    <div className="form__group">
                                         <span>Description</span>
                                         <input type="text" placeholder="Description..." value={enterDescription} onChange={e => setEnterDescription(e.target.value)} required />
-                                    </FormGroup>
+                                    </div>
 
                                     <div className="d-flex align-items-center justify-content-between gap-5">
-                                        <FormGroup className="form__group w-50">
+                                        <div className="form__group w-50">
                                             <span>Price</span>
                                             <input type="number" placeholder="$100" value={enterPrice} onChange={e => setEnterPrice(e.target.value)} required />
-                                        </FormGroup>
-                                        <FormGroup className="form__group w-50">
+                                        </div>
+                                        <div className="form__group w-50">
                                             <span>Category</span>
                                             <select className="w-100 p-2"
                                                 value={enterCategory}
@@ -114,18 +131,18 @@ const AddProduct = () => {
                                                 <option value="fruits">Fruits</option>
                                                 <option value="candy">Candy</option>
                                             </select>
-                                        </FormGroup>
+                                        </div>
                                     </div>
 
                                     <div>
-                                        <FormGroup className="form__group">
+                                        <div className="form__group">
                                             <span>Product Image</span>
                                             <input type="file" onChange={e => setEnterProductImg(e.target.files[0])} required />
-                                        </FormGroup>
+                                        </div>
                                     </div>
 
-                                    <button className="buy__btn" type="submit">Add Product</button>
-                                </Form>
+                                </div>
+                                <button onClick={addProduct} className="buy__btn" type="submit">Add Product</button>
                             </>
                         }
                     </Col>

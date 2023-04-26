@@ -8,6 +8,7 @@ const Dashboard = () => {
 
     const { data: product } = useGetData("products");
     const { data: users } = useGetData("users");
+    const { data: orders } = useGetData("orders");
     return (
         <>
             <section>
@@ -22,7 +23,7 @@ const Dashboard = () => {
                         <Col className="lg-3">
                             <div className="order__box">
                                 <h5>Orders</h5>
-                                <span>789</span>
+                                <span>{orders.length}</span>
                             </div>
                         </Col>
                         <Col className="lg-3">

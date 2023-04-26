@@ -46,7 +46,7 @@ const AllProduct = () => {
                                                     onClick={() => {
                                                         deleteProduct(item.id);
                                                     }}
-                                                    className="btn btn-danger">Delete</button>
+                                                    className="btn btn-danger">x</button>
                                             </td>
                                         </tr>
 

@@ -89,12 +89,19 @@ const Tr = ({ item }) => {
 
     const handlePlus = () => {
         dispatch(cartActions.addItem({
-            id: item?.id,
+            id: item.id,
+            productName: item.title,
+            price: item.price,
+            imgUrl: item.imgUrl,
+
         }))
     }
     const handleMinus = () => {
         dispatch(cartActions.minusItem({
-            id: item?.id,
+            id: item.id,
+            productName: item.title,
+            price: item.price,
+            imgUrl: item.imgUrl,
         }))
     }
     return <tr>
