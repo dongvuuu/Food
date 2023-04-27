@@ -20,10 +20,10 @@
 .buy__btn {
     border: none;
     outline: none;
-    padding: 8px 20px;
+    padding: 20px 40px;
     border-radius: 5px;
     background: var(--primary-color);
-    color: #fff;
+    color: #ffffff;
     cursor: pointer;
     font-size: 1rem;
     margin-top: 40px;

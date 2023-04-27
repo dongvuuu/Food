@@ -64,7 +64,7 @@ const Cart = () => {
                                 </h6>
 
                             </div>
-                            <p className="fs-6 mt-2">Taxes and shipping will calculate in checkout</p>
+
                             <div>
 
 
