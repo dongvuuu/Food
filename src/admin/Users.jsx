@@ -46,7 +46,7 @@ const Users = () => {
                                                 <td>
                                                     <button className="btn btn-danger" onClick={() => {
                                                         deleteUser(user.uid);
-                                                    }}>Delete</button>
+                                                    }}>x</button>
                                                 </td>
 
                                             </tr>

@@ -67,7 +67,7 @@ const Signup = () => {
 
         } catch (error) {
             setLoading(false)
-            toast.error("something went wrong");
+            toast.error("Something went wrong");
 
         }
     };
@@ -100,7 +100,7 @@ const Signup = () => {
                                         <input type="file" onChange={e => setFile(e.target.files[0])} />
                                     </FormGroup>
 
-                                    <button type="submit" className="buy__btn auth__btn">Create an Account</button>
+                                    <button type="submit" className="buy__btn auth__btn">Create</button>
                                     <p>Already have an account? <Link to="/login">Login</Link></p>
                                 </Form>
 

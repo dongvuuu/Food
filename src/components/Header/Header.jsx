@@ -95,7 +95,7 @@ const Header = () => {
                             <div className="logo">
                                 <img src={logo} alt="logo" />
                                 <div>
-                                    <h1>f 0 0 d</h1>
+                                    <h1>f 0_0 d</h1>
                                 </div>
                             </div>
                         </NavLink>
